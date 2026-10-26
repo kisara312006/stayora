@@ -1,0 +1,51 @@
+// ⚠️ DEMO DATA ONLY: these are NOT real properties.
+// They exist so we can design the listing cards before Firestore is connected.
+// In Phase 5 the home page will read real, published listings from Firestore
+// and this file will no longer be used.
+export const demoListings = [
+  {
+    id: 'demo-1',
+    isDemo: true,
+    title: 'Demo Listing A: Sample Boarding Room',
+    category: 'Student Boarding',
+    area: 'Sample Area',
+    city: 'Sample City',
+    price: 18000,
+    roomType: 'Private room',
+    availability: 'available',
+    availableRooms: 2,
+    facilities: ['Wi-Fi', 'Furnished', 'Attached bathroom'],
+    verified: true,
+    lastUpdated: 'Demo record',
+  },
+  {
+    id: 'demo-2',
+    isDemo: true,
+    title: 'Demo Listing B: Sample Student Hostel',
+    category: 'Student Hostel',
+    area: 'Sample Area',
+    city: 'Sample City',
+    price: 12000,
+    roomType: 'Shared room',
+    availability: 'limited',
+    availableRooms: 1,
+    facilities: ['Wi-Fi', 'Study area', 'Laundry'],
+    verified: false,
+    lastUpdated: 'Demo record',
+  },
+  {
+    id: 'demo-3',
+    isDemo: true,
+    title: 'Demo Listing C: Sample Furnished Room',
+    category: 'Furnished Accommodation',
+    area: 'Sample Area',
+    city: 'Sample City',
+    price: 25000,
+    roomType: 'Private room',
+    availability: 'occupied',
+    availableRooms: 0,
+    facilities: ['Air conditioning', 'Kitchen access', 'Parking'],
+    verified: false,
+    lastUpdated: 'Demo record',
+  },
+]
