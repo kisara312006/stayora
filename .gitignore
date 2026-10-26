@@ -31,3 +31,7 @@ dist-ssr
 # Firebase local files
 .firebase/
 firebase-debug.log
+
+# Firebase Admin keys: full control of your project. NEVER commit these.
+serviceAccountKey*.json
+*-firebase-adminsdk-*.json
