@@ -1,122 +1,114 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { Routes, Route } from 'react-router-dom'
+import Layout from './components/layout/Layout'
+import Home from './pages/Home'
+import About from './pages/About'
+import Contact from './pages/Contact'
+import NotFound from './pages/NotFound'
+import PlaceholderPage from './pages/PlaceholderPage'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+// Pages that will be built in later phases use PlaceholderPage for now,
+// so every menu link works and nothing shows a "not found" error.
+export default function App() {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="about" element={<About />} />
+        <Route path="contact" element={<Contact />} />
 
-      <div className="ticks"></div>
+        <Route
+          path="explore"
+          element={
+            <PlaceholderPage
+              title="Explore accommodation"
+              phase="Phase 5 and 6"
+              description="Search, filters and results will appear here."
+            />
+          }
+        />
+        <Route
+          path="accommodation/:id"
+          element={
+            <PlaceholderPage
+              title="Accommodation details"
+              phase="Phase 5"
+              description="Full listing details, photos and map will appear here."
+            />
+          }
+        />
+        <Route
+          path="assistant"
+          element={
+            <PlaceholderPage
+              title="Stayora AI assistant"
+              phase="Phase 7"
+              description="The AI chatbot will live here."
+            />
+          }
+        />
+        <Route
+          path="games"
+          element={
+            <PlaceholderPage
+              title="Games"
+              phase="Phase 9"
+              description="Room Match and Stay Smart Quiz will appear here."
+            />
+          }
+        />
+        <Route
+          path="login"
+          element={
+            <PlaceholderPage
+              title="Login"
+              phase="Phase 4"
+              description="Sign-in will be built with Firebase Authentication."
+            />
+          }
+        />
+        <Route
+          path="register"
+          element={
+            <PlaceholderPage
+              title="Register"
+              phase="Phase 4"
+              description="Registration for seekers and owners will appear here."
+            />
+          }
+        />
+        <Route
+          path="privacy"
+          element={
+            <PlaceholderPage
+              title="Privacy Policy"
+              phase="a later phase"
+              description="Your real privacy policy text must be written and added before launch."
+            />
+          }
+        />
+        <Route
+          path="terms"
+          element={
+            <PlaceholderPage
+              title="Terms and Conditions"
+              phase="a later phase"
+              description="Your real terms text must be written and added before launch."
+            />
+          }
+        />
+        <Route
+          path="safety"
+          element={
+            <PlaceholderPage
+              title="Help and Safety Guidelines"
+              phase="a later phase"
+              description="Safety guidance for seekers and owners will appear here."
+            />
+          }
+        />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
   )
 }
-
-export default App
