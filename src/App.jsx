@@ -5,6 +5,7 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
 import PlaceholderPage from './pages/PlaceholderPage'
+import FirebaseCheck from './pages/FirebaseCheck'
 
 // Pages that will be built in later phases use PlaceholderPage for now,
 // so every menu link works and nothing shows a "not found" error.
@@ -106,7 +107,9 @@ export default function App() {
             />
           }
         />
-
+          {import.meta.env.DEV && (
+          <Route path="dev/firebase-check" element={<FirebaseCheck />} />
+        )}
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

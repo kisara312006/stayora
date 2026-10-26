@@ -1,0 +1,279 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- Helper functions ----------
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Admin status comes from a custom claim set by trusted server code.
+    // A user cannot change this from the browser.
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.admin == true;
+    }
+
+    function isUser(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function profileOf(uid) {
+      return get(/databases/$(database)/documents/users/$(uid)).data;
+    }
+
+    function hasProfile() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function isActiveUser() {
+      return hasProfile() && profileOf(request.auth.uid).suspended == false;
+    }
+
+    function isActiveOwner() {
+      return isActiveUser() && profileOf(request.auth.uid).role == 'owner';
+    }
+
+    // The names of fields added, removed or changed by this write
+    function changedKeys() {
+      return request.resource.data.diff(resource.data).affectedKeys();
+    }
+
+    function isShortText(value, minLen, maxLen) {
+      return value is string && value.size() >= minLen && value.size() <= maxLen;
+    }
+
+    function optionalText(data, field, maxLen) {
+      return !(field in data) || data[field] == null
+        || (data[field] is string && data[field].size() <= maxLen);
+    }
+
+    // Basic checks every listing must pass. Phase 5 will tighten this
+    // once the owner form is final.
+    function validListing(d) {
+      return isShortText(d.title, 3, 100)
+        && isShortText(d.description, 0, 3000)
+        && d.propertyType in ['boarding', 'hostel']
+        && d.roomTypes is list
+        && d.facilities is list && d.facilities.size() <= 30
+        && d.monthlyRent is number && d.monthlyRent > 0 && d.monthlyRent <= 1000000
+        && d.totalRooms is int && d.totalRooms >= 1 && d.totalRooms <= 500
+        && d.availableRooms is int && d.availableRooms >= 0
+        && d.availableRooms <= d.totalRooms
+        && isShortText(d.city, 1, 60)
+        && isShortText(d.area, 0, 60)
+        && d.photos is list && d.photos.size() <= 10;
+    }
+
+    // Can this listing receive an enquiry from the current user?
+    function listingAcceptsEnquiries(listingId, ownerId) {
+      let listing = get(/databases/$(database)/documents/accommodations/$(listingId)).data;
+      return listing.ownerId == ownerId
+        && listing.ownerId != request.auth.uid
+        && listing.status == 'published'
+        && listing.isPaused == false;
+    }
+
+    // ---------- users ----------
+    // Private. Each person reads and edits only their own profile.
+    match /users/{uid} {
+      allow read: if isUser(uid) || isAdmin();
+
+      allow create: if isUser(uid)
+        && request.resource.data.keys().hasOnly([
+          'displayName', 'email', 'phone', 'role', 'preferredLocations',
+          'budgetMin', 'budgetMax', 'preferredType', 'points', 'level',
+          'suspended', 'ownerVerificationStatus', 'createdAt', 'updatedAt'
+        ])
+        && request.resource.data.keys().hasAll([
+          'displayName', 'email', 'role', 'points', 'level', 'suspended',
+          'ownerVerificationStatus', 'createdAt', 'updatedAt'
+        ])
+        && isShortText(request.resource.data.displayName, 2, 80)
+        && optionalText(request.resource.data, 'phone', 20)
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.role in ['seeker', 'owner']
+        && request.resource.data.points == 0
+        && request.resource.data.level == 1
+        && request.resource.data.suspended == false
+        && request.resource.data.ownerVerificationStatus == 'none'
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+
+      allow update: if isUser(uid)
+        && resource.data.suspended == false
+        && !changedKeys().hasAny([
+          'points', 'level', 'suspended', 'ownerVerificationStatus',
+          'createdAt', 'email'
+        ])
+        // A seeker may become an owner, but nobody can become anything else.
+        && (request.resource.data.role == resource.data.role
+            || (resource.data.role == 'seeker' && request.resource.data.role == 'owner'))
+        && isShortText(request.resource.data.displayName, 2, 80)
+        && optionalText(request.resource.data, 'phone', 20)
+        && request.resource.data.updatedAt == request.time;
+
+      allow delete: if false;
+    }
+
+    // ---------- accommodations ----------
+    // Public ONLY when status is 'published' and not paused.
+    match /accommodations/{listingId} {
+      allow read: if (resource.data.status == 'published' && resource.data.isPaused == false)
+        || isUser(resource.data.ownerId)
+        || isAdmin();
+
+      // Owners create drafts only.
+      allow create: if isActiveOwner()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.status == 'draft'
+        && request.resource.data.isPaused == false
+        && request.resource.data.verified == false
+        && request.resource.data.featured == false
+        && request.resource.data.isDemo == false
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time
+        && validListing(request.resource.data);
+
+      // Owners may edit their own listing, but never publish or verify it.
+      allow update: if isActiveOwner()
+        && isUser(resource.data.ownerId)
+        && resource.data.status != 'removed'
+        && !changedKeys().hasAny([
+          'ownerId', 'verified', 'featured', 'isDemo', 'createdAt',
+          'publishedAt', 'moderationNote'
+        ])
+        && request.resource.data.updatedAt == request.time
+        && validListing(request.resource.data)
+        && (
+          // 1) Edits that move the listing to a non-public status
+          //    (editing a live listing sends it back for review).
+          request.resource.data.status in ['draft', 'pending', 'archived']
+          // 2) A live listing: the owner may only change availability or pause it.
+          || (resource.data.status == 'published'
+              && request.resource.data.status == 'published'
+              && changedKeys().hasOnly([
+                   'availableRooms', 'availabilityUpdatedAt', 'isPaused', 'updatedAt'
+                 ])
+              && request.resource.data.availabilityUpdatedAt == request.time)
+        );
+
+      // Owners archive instead of deleting.
+      allow delete: if false;
+    }
+
+    // ---------- favourites ----------
+    // Document ID is "<userId>_<accommodationId>", which prevents duplicates.
+    match /favourites/{favId} {
+      allow get: if isSignedIn() && favId.matches(request.auth.uid + '_.+');
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+
+      allow create: if isActiveUser()
+        && request.resource.data.keys().hasOnly(['userId', 'accommodationId', 'createdAt'])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.accommodationId is string
+        && favId == request.auth.uid + '_' + request.resource.data.accommodationId
+        && request.resource.data.createdAt == request.time;
+
+      allow update: if false;
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    // ---------- enquiries ----------
+    match /enquiries/{enquiryId} {
+      allow read: if (isSignedIn()
+          && (resource.data.seekerId == request.auth.uid
+              || resource.data.ownerId == request.auth.uid))
+        || isAdmin();
+
+      allow create: if isActiveUser()
+        && request.resource.data.keys().hasOnly([
+          'accommodationId', 'ownerId', 'seekerId', 'seekerName',
+          'message', 'status', 'createdAt', 'updatedAt'
+        ])
+        && request.resource.data.seekerId == request.auth.uid
+        && request.resource.data.status == 'new'
+        && isShortText(request.resource.data.seekerName, 1, 80)
+        && isShortText(request.resource.data.message, 10, 1000)
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time
+        && listingAcceptsEnquiries(
+             request.resource.data.accommodationId, request.resource.data.ownerId);
+
+      // Only the listing's owner responds, and only these fields change.
+      allow update: if isUser(resource.data.ownerId)
+        && changedKeys().hasOnly(['status', 'reply', 'repliedAt', 'updatedAt'])
+        && request.resource.data.status in ['read', 'replied', 'resolved']
+        && (!('reply' in request.resource.data)
+            || isShortText(request.resource.data.reply, 1, 1000))
+        && request.resource.data.updatedAt == request.time;
+
+      allow delete: if false;
+    }
+
+    // ---------- notifications ----------
+    // Created only by trusted server code. Users may mark their own as read.
+    match /notifications/{notificationId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn()
+        && resource.data.userId == request.auth.uid
+        && changedKeys().hasOnly(['read'])
+        && request.resource.data.read is bool;
+      allow create, delete: if false;
+    }
+
+    // ---------- reports ----------
+    // Document ID is "<userId>_<accommodationId>": one report per user per listing.
+    match /reports/{reportId} {
+      allow create: if isActiveUser()
+        && request.resource.data.keys().hasOnly([
+          'reporterId', 'accommodationId', 'reason', 'details', 'status', 'createdAt'
+        ])
+        && request.resource.data.reporterId == request.auth.uid
+        && request.resource.data.accommodationId is string
+        && reportId == request.auth.uid + '_' + request.resource.data.accommodationId
+        && request.resource.data.reason in [
+             'scam', 'wrong-information', 'unavailable', 'inappropriate-content', 'other'
+           ]
+        && isShortText(request.resource.data.details, 0, 1000)
+        && request.resource.data.status == 'open'
+        && request.resource.data.createdAt == request.time;
+
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    // ---------- gamification (written by trusted server code only) ----------
+    match /achievements/{id} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow write: if false;
+    }
+
+    match /gameResults/{id} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow write: if false;
+    }
+
+    match /rewardTransactions/{id} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow write: if false;
+    }
+
+    // ---------- platformSettings ----------
+    // Public, non-sensitive configuration. Never put secrets here.
+    match /platformSettings/{key} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // ---------- auditLogs ----------
+    match /auditLogs/{id} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    // Any collection not listed above is denied by default.
+  }
+}
