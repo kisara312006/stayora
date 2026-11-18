@@ -38,9 +38,9 @@ export default function FaqSection() {
           {faqs.map((item) => (
             <details
               key={item.q}
-              className="group rounded-2xl border border-taupe bg-white p-5 shadow-sm"
+              className="group rounded-2xl border border-taupe bg-surface p-5 shadow-sm"
             >
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-navy">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-ink">
                 {item.q}
                 <ChevronDown
                   className="h-5 w-5 shrink-0 text-gold transition-transform duration-200 group-open:rotate-180"

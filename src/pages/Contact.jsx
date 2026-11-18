@@ -28,7 +28,7 @@ function Field({ id, label, error, children }) {
       </label>
       {children}
       {error && (
-        <p id={`${id}-error`} className="mt-1 text-sm text-red-700">
+        <p id={`${id}-error`} className="mt-1 text-sm text-danger">
           {error}
         </p>
       )}
@@ -58,7 +58,7 @@ export default function Contact() {
     name,
     value: values[name],
     onChange: handleChange,
-    className: `${inputClass} ${errors[name] ? 'border-red-700' : ''}`,
+    className: `${inputClass} ${errors[name] ? 'border-danger' : ''}`,
     'aria-invalid': errors[name] ? 'true' : 'false',
     'aria-describedby': errors[name] ? `${name}-error` : undefined,
   })
@@ -80,7 +80,7 @@ export default function Contact() {
         <form
           onSubmit={handleSubmit}
           noValidate
-          className="space-y-5 rounded-2xl border border-taupe bg-white p-6 shadow-sm sm:p-8"
+          className="space-y-5 rounded-2xl border border-taupe bg-surface p-6 shadow-sm sm:p-8"
         >
           <Field id="name" label="Your name" error={errors.name}>
             <input type="text" autoComplete="name" {...fieldProps('name')} />
@@ -109,7 +109,7 @@ export default function Contact() {
           )}
         </form>
 
-        <aside className="space-y-4 rounded-2xl border border-taupe bg-white p-6 shadow-sm sm:p-8">
+        <aside className="space-y-4 rounded-2xl border border-taupe bg-surface p-6 shadow-sm sm:p-8">
           <h2 className="text-xl">Contact details</h2>
           <p className="flex items-start gap-3">
             <Mail className="mt-1 h-5 w-5 shrink-0 text-gold" aria-hidden="true" />

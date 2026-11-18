@@ -13,7 +13,7 @@ const examplePrompts = [
 
 export default function AiPromoSection() {
   return (
-    <section className="bg-white py-16">
+    <section className="bg-surface py-16">
       <Container className="grid gap-10 lg:grid-cols-2 lg:items-center">
         <div>
           <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-charcoal/70">
@@ -49,7 +49,7 @@ export default function AiPromoSection() {
               <li key={prompt}>
                 <Link
                   to={`/assistant?prompt=${encodeURIComponent(prompt)}`}
-                  className="block rounded-xl border border-taupe bg-white px-4 py-3 text-sm text-charcoal transition-colors hover:border-navy"
+                  className="block rounded-xl border border-taupe bg-surface px-4 py-3 text-sm text-charcoal transition-colors hover:border-ink"
                 >
                   “{prompt}”
                 </Link>

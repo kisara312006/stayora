@@ -29,9 +29,9 @@ export default function HowItWorks() {
           {steps.map((step, index) => (
             <li
               key={step.title}
-              className="rounded-2xl border border-taupe bg-white p-6 shadow-sm"
+              className="rounded-2xl border border-taupe bg-surface p-6 shadow-sm"
             >
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gold text-lg font-bold text-navy">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gold text-lg font-bold text-ink">
                 {index + 1}
               </span>
               <h3 className="mt-4 text-lg">{step.title}</h3>

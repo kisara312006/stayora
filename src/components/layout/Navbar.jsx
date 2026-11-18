@@ -4,6 +4,7 @@ import { Menu, X, Search } from 'lucide-react'
 import logoWhite from '../../assets/logo/logo-horizontal-white.png'
 import Button from '../ui/Button'
 import Container from '../ui/Container'
+import ThemeToggle from '../ui/ThemeToggle'
 
 const navLinks = [
   { to: '/', label: 'Home', end: true },
@@ -45,6 +46,7 @@ export default function Navbar() {
           </ul>
 
           <div className="hidden items-center gap-3 xl:flex">
+            <ThemeToggle />
             <NavLink to="/login" className={linkClass}>
               Login
             </NavLink>
@@ -57,21 +59,24 @@ export default function Navbar() {
             </Button>
           </div>
 
-          {/* Mobile menu button */}
-          <button
-            type="button"
-            onClick={() => setOpen(!open)}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            aria-label={open ? 'Close menu' : 'Open menu'}
-            className="rounded-lg p-2 text-white hover:bg-white/10 xl:hidden"
-          >
-            {open ? (
-              <X className="h-6 w-6" aria-hidden="true" />
-            ) : (
-              <Menu className="h-6 w-6" aria-hidden="true" />
-            )}
-          </button>
+          {/* Mobile: theme toggle and menu button */}
+          <div className="flex items-center gap-1 xl:hidden">
+            <ThemeToggle />
+            <button
+              type="button"
+              onClick={() => setOpen(!open)}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              aria-label={open ? 'Close menu' : 'Open menu'}
+              className="rounded-lg p-2 text-white hover:bg-white/10"
+            >
+              {open ? (
+                <X className="h-6 w-6" aria-hidden="true" />
+              ) : (
+                <Menu className="h-6 w-6" aria-hidden="true" />
+              )}
+            </button>
+          </div>
         </nav>
       </Container>
 

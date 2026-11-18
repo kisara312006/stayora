@@ -1,35 +1,69 @@
 @import "tailwindcss";
 
-/* Stayora brand palette: these become classes like bg-navy, text-gold, border-taupe */
-@theme {
+/* Lets us write classes like dark:bg-gold. Active when <html> has class "dark". */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Stayora palette (light mode). "static" keeps every variable available. */
+@theme static {
   --color-navy: #172c46;
   --color-cream: #f4ebdd;
   --color-gold: #d5b98c;
   --color-taupe: #d9d0c3;
   --color-charcoal: #343a40;
+
+  /* Theme-aware colours */
+  --color-ink: #172c46; /* headings, labels, links */
+  --color-surface: #ffffff; /* cards and forms */
+  --color-danger: #b42318; /* error text */
+
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, "Segoe UI", Roboto,
     sans-serif;
 }
 
+/* Dark mode: only the neutral colours change. Navy and gold stay the same. */
+:root.dark {
+  --color-cream: #0d1726; /* page background */
+  --color-taupe: #34496a; /* borders and subtle bands */
+  --color-charcoal: #e8e3d9; /* body text */
+  --color-ink: #f4ebdd;
+  --color-surface: #1c3050;
+  --color-danger: #ff9d94;
+}
+
+/* Text on a solid gold background must stay navy in dark mode */
+.dark .bg-gold {
+  color: var(--color-navy);
+}
+
 @layer base {
+  :root {
+    color-scheme: light;
+  }
+  :root.dark {
+    color-scheme: dark; /* dark scrollbars, dropdowns and form controls */
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
     @apply bg-cream font-sans text-charcoal antialiased;
+    transition:
+      background-color 200ms ease,
+      color 200ms ease;
   }
 
   h1,
   h2,
   h3,
   h4 {
-    @apply font-bold tracking-tight text-navy;
+    @apply font-bold tracking-tight text-ink;
   }
 
-  /* Visible keyboard focus. Navy on light areas, gold inside navy areas. */
+  /* Visible keyboard focus. Gold inside navy areas. */
   :focus-visible {
-    outline: 3px solid var(--color-navy);
+    outline: 3px solid var(--color-ink);
     outline-offset: 2px;
   }
   .bg-navy :focus-visible {

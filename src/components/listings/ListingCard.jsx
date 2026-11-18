@@ -4,8 +4,8 @@ import { Heart, MapPin, Building2, BadgeCheck, BedDouble } from 'lucide-react'
 import { formatLKR } from '../../utils/format'
 
 const availabilityStyles = {
-  available: { label: 'Available', classes: 'bg-navy/10 text-navy' },
-  limited: { label: 'Few rooms left', classes: 'bg-gold/40 text-navy' },
+  available: { label: 'Available', classes: 'bg-navy/10 text-ink' },
+  limited: { label: 'Few rooms left', classes: 'bg-gold/40 text-ink' },
   occupied: { label: 'Currently full', classes: 'bg-taupe text-charcoal' },
 }
 
@@ -16,9 +16,9 @@ export default function ListingCard({ listing }) {
   const status = availabilityStyles[listing.availability]
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-2xl border border-taupe bg-white shadow-sm transition-shadow duration-200 hover:shadow-md">
+    <article className="flex flex-col overflow-hidden rounded-2xl border border-taupe bg-surface shadow-sm transition-shadow duration-200 hover:shadow-md">
       {/* Photo area: real photos arrive in Phase 5 */}
-      <div className="relative flex h-44 flex-col items-center justify-center gap-1 bg-taupe/50 text-navy/50">
+      <div className="relative flex h-44 flex-col items-center justify-center gap-1 bg-taupe/50 text-ink/50">
         <Building2 className="h-10 w-10" aria-hidden="true" />
         <span className="text-xs">Photo coming soon</span>
 
@@ -31,7 +31,7 @@ export default function ListingCard({ listing }) {
           onClick={() => setSaved(!saved)}
           aria-pressed={saved}
           aria-label={saved ? 'Remove from favourites' : 'Save to favourites'}
-          className="absolute right-3 top-3 rounded-full bg-white p-2 text-navy shadow transition-colors hover:bg-cream"
+          className="absolute right-3 top-3 rounded-full bg-surface p-2 text-ink shadow transition-colors hover:bg-cream"
         >
           <Heart
             className={`h-5 w-5 ${saved ? 'fill-gold text-gold' : ''}`}
@@ -46,7 +46,7 @@ export default function ListingCard({ listing }) {
             {listing.category}
           </span>
           {listing.verified && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-gold/30 px-2 py-0.5 text-xs font-semibold text-navy">
+            <span className="inline-flex items-center gap-1 rounded-full bg-gold/30 px-2 py-0.5 text-xs font-semibold text-ink">
               <BadgeCheck className="h-3.5 w-3.5" aria-hidden="true" />
               Verified
             </span>
@@ -60,7 +60,7 @@ export default function ListingCard({ listing }) {
           {listing.area}, {listing.city}
         </p>
 
-        <p className="mt-3 text-xl font-bold text-navy">
+        <p className="mt-3 text-xl font-bold text-ink">
           {formatLKR(listing.price)}
           <span className="text-sm font-medium text-charcoal/70"> / month</span>
         </p>
@@ -100,7 +100,7 @@ export default function ListingCard({ listing }) {
 
         <Link
           to={`/accommodation/${listing.id}`}
-          className="mt-4 inline-flex items-center justify-center rounded-xl bg-navy px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-navy/90"
+          className="mt-4 inline-flex items-center justify-center rounded-xl bg-navy px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-navy/90 dark:bg-gold dark:text-navy dark:hover:bg-gold/85 dark:bg-gold dark:text-navy dark:hover:bg-gold/85"
         >
           View Details
         </Link>

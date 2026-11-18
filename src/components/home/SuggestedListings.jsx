@@ -14,8 +14,8 @@ export default function SuggestedListings() {
           subtitle="Selected listings approved for public display."
         />
 
-        <p className="mx-auto mt-6 max-w-2xl rounded-xl border border-gold bg-white px-4 py-3 text-center text-sm text-charcoal">
-          <strong className="text-navy">Development notice:</strong> the cards below
+        <p className="mx-auto mt-6 max-w-2xl rounded-xl border border-gold bg-surface px-4 py-3 text-center text-sm text-charcoal">
+          <strong className="text-ink">Development notice:</strong> the cards below
           are sample demo records, not real properties. Real, approved listings will
           appear here once the database is connected.
         </p>

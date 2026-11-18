@@ -26,7 +26,7 @@ export default function OwnerBenefits() {
           subtitle="Publish your property and connect with people looking for a place like yours."
         />
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-taupe bg-white p-6 shadow-sm">
+          <div className="rounded-2xl border border-taupe bg-surface p-6 shadow-sm">
             <h3 className="text-xl">Benefits</h3>
             <ul className="mt-4 space-y-3 text-charcoal/90">
               {benefits.map((b) => (
@@ -37,12 +37,12 @@ export default function OwnerBenefits() {
               ))}
             </ul>
           </div>
-          <div className="rounded-2xl border border-taupe bg-white p-6 shadow-sm">
+          <div className="rounded-2xl border border-taupe bg-surface p-6 shadow-sm">
             <h3 className="text-xl">How to publish a listing</h3>
             <ol className="mt-4 space-y-3 text-charcoal/90">
               {publishSteps.map((s, i) => (
                 <li key={s} className="flex gap-3">
-                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gold text-sm font-bold text-navy">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gold text-sm font-bold text-ink">
                     {i + 1}
                   </span>
                   {s}
