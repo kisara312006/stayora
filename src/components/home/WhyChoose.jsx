@@ -49,7 +49,7 @@ export default function WhyChoose() {
             return (
               <li
                 key={item.title}
-                className="rounded-2xl border border-taupe bg-white p-6 shadow-sm"
+                className="rounded-2xl border border-taupe bg-surface p-6 shadow-sm"
               >
                 <Icon className="h-7 w-7 text-gold" aria-hidden="true" />
                 <h3 className="mt-3 text-lg">{item.title}</h3>

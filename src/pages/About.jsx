@@ -28,14 +28,14 @@ export default function About() {
         <section>
           <SectionHeading align="left" title="Who Stayora is for" />
           <div className="mt-4 grid gap-6 sm:grid-cols-2">
-            <div className="rounded-2xl border border-taupe bg-white p-6">
+            <div className="rounded-2xl border border-taupe bg-surface p-6">
               <h3 className="text-lg">Accommodation seekers</h3>
               <p className="mt-2 text-charcoal/80">
                 University students and working professionals looking for a
                 boarding room or hostel that fits their budget and routine.
               </p>
             </div>
-            <div className="rounded-2xl border border-taupe bg-white p-6">
+            <div className="rounded-2xl border border-taupe bg-surface p-6">
               <h3 className="text-lg">Property owners</h3>
               <p className="mt-2 text-charcoal/80">
                 Owners of boarding places and hostels who want to publish their
@@ -55,7 +55,7 @@ export default function About() {
           </ul>
         </section>
 
-        <section className="rounded-2xl border border-gold bg-white p-6">
+        <section className="rounded-2xl border border-gold bg-surface p-6">
           <h2 className="text-xl">Safety first</h2>
           <p className="mt-2 text-charcoal/90">
             Verification badges show that some checks were completed. They do not

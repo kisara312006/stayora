@@ -88,9 +88,9 @@ const initialResults = Object.fromEntries(
 
 function StatusIcon({ status }) {
   if (status === 'pass')
-    return <CheckCircle2 className="h-6 w-6 text-navy" aria-label="Passed" />
+    return <CheckCircle2 className="h-6 w-6 text-ink" aria-label="Passed" />
   if (status === 'fail')
-    return <XCircle className="h-6 w-6 text-red-700" aria-label="Failed" />
+    return <XCircle className="h-6 w-6 text-danger" aria-label="Failed" />
   return <Loader2 className="h-6 w-6 animate-spin text-gold" aria-label="Running" />
 }
 
@@ -112,7 +112,7 @@ export default function FirebaseCheck() {
 
   return (
     <Container className="max-w-3xl py-12">
-      <span className="rounded-full bg-gold px-3 py-1 text-sm font-semibold text-navy">
+      <span className="rounded-full bg-gold px-3 py-1 text-sm font-semibold text-ink">
         Developer tool
       </span>
       <h1 className="mt-4 text-3xl">Firebase connection check</h1>
@@ -121,8 +121,8 @@ export default function FirebaseCheck() {
       </p>
 
       {!isFirebaseConfigured ? (
-        <div className="mt-6 rounded-2xl border border-red-700 bg-white p-5">
-          <h2 className="text-lg text-red-700">Firebase is not configured</h2>
+        <div className="mt-6 rounded-2xl border border-danger bg-surface p-5">
+          <h2 className="text-lg text-danger">Firebase is not configured</h2>
           <p className="mt-2 text-sm">
             These values in your <code>.env</code> file are missing or still
             placeholders:
@@ -138,7 +138,7 @@ export default function FirebaseCheck() {
         </div>
       ) : (
         <>
-          <p className="mt-6 rounded-xl border border-taupe bg-white p-4 text-sm">
+          <p className="mt-6 rounded-xl border border-taupe bg-surface p-4 text-sm">
             Connected to project: <strong>{firebaseConfig.projectId}</strong>
           </p>
 
@@ -148,7 +148,7 @@ export default function FirebaseCheck() {
               return (
                 <li
                   key={test.id}
-                  className="flex gap-4 rounded-2xl border border-taupe bg-white p-5"
+                  className="flex gap-4 rounded-2xl border border-taupe bg-surface p-5"
                 >
                   <StatusIcon status={result.status} />
                   <div className="min-w-0">

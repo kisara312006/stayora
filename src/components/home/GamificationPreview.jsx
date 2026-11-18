@@ -23,7 +23,7 @@ const features = [
 
 export default function GamificationPreview() {
   return (
-    <section className="bg-white py-16">
+    <section className="bg-surface py-16">
       <Container>
         <SectionHeading
           eyebrow="Play and learn"

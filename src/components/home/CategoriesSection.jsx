@@ -18,12 +18,12 @@ export default function CategoriesSection() {
               <li key={cat.id}>
                 <Link
                   to={`/explore?category=${cat.id}`}
-                  className="flex h-full flex-col rounded-2xl border border-taupe bg-white p-5 shadow-sm transition-shadow duration-200 hover:shadow-md"
+                  className="flex h-full flex-col rounded-2xl border border-taupe bg-surface p-5 shadow-sm transition-shadow duration-200 hover:shadow-md"
                 >
                   <span className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-navy text-gold">
                     <Icon className="h-6 w-6" aria-hidden="true" />
                   </span>
-                  <span className="font-semibold text-navy">{cat.label}</span>
+                  <span className="font-semibold text-ink">{cat.label}</span>
                   <span className="mt-1 text-sm text-charcoal/80">
                     {cat.description}
                   </span>

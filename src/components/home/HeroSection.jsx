@@ -50,7 +50,7 @@ export default function HeroSection() {
           <form
             onSubmit={handleSubmit}
             aria-label="Search accommodation"
-            className="mt-8 grid gap-3 rounded-2xl bg-white p-4 shadow-lg sm:grid-cols-2 sm:p-5"
+            className="mt-8 grid gap-3 rounded-2xl bg-surface p-4 shadow-lg sm:grid-cols-2 sm:p-5"
           >
             <div className="sm:col-span-2">
               <label htmlFor="hero-location" className={labelClass}>
@@ -137,11 +137,11 @@ export default function HeroSection() {
             <p className="text-xs font-semibold uppercase tracking-wide text-white/60">
               Example conversation
             </p>
-            <div className="ml-auto max-w-[90%] rounded-2xl rounded-br-sm bg-gold px-4 py-3 text-sm text-navy">
+            <div className="ml-auto max-w-[90%] rounded-2xl rounded-br-sm bg-gold px-4 py-3 text-sm text-ink">
               I need a furnished room near SLIIT, with Wi-Fi, under Rs. 20,000 per
               month.
             </div>
-            <div className="max-w-[90%] rounded-2xl rounded-bl-sm bg-white px-4 py-3 text-sm text-charcoal">
+            <div className="max-w-[90%] rounded-2xl rounded-bl-sm bg-surface px-4 py-3 text-sm text-charcoal">
               I can help you find a suitable place. Would you prefer a private room
               or a shared room?
             </div>

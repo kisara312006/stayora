@@ -21,7 +21,7 @@ export default function PopularLocations() {
             <li key={area}>
               <Link
                 to={`/explore?location=${encodeURIComponent(area)}`}
-                className="inline-flex items-center gap-2 rounded-full border border-taupe bg-white px-4 py-2 text-sm font-medium text-navy transition-colors hover:border-navy"
+                className="inline-flex items-center gap-2 rounded-full border border-taupe bg-surface px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-ink"
               >
                 <MapPin className="h-4 w-4 text-gold" aria-hidden="true" />
                 {area}
