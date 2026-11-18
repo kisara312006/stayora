@@ -1,10 +1,13 @@
 import { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Menu, X, Search } from 'lucide-react'
 import logoWhite from '../../assets/logo/logo-horizontal-white.png'
 import Button from '../ui/Button'
 import Container from '../ui/Container'
 import ThemeToggle from '../ui/ThemeToggle'
+import ProfileMenu from './ProfileMenu'
+import { useAuth } from '../../hooks/useAuth'
+import { logout } from '../../services/authService'
 
 const navLinks = [
   { to: '/', label: 'Home', end: true },
@@ -23,9 +26,20 @@ const linkClass = ({ isActive }) =>
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
+  const { user, profile, isAdmin } = useAuth()
+  const navigate = useNavigate()
   const closeMenu = () => setOpen(false)
 
-  // Phase 4 will replace Login/Register with a profile menu when signed in.
+  async function handleLogout() {
+    closeMenu()
+    navigate('/')
+    try {
+      await logout()
+    } catch (error) {
+      console.error('Logout failed:', error.code)
+    }
+  }
+
   return (
     <header className="sticky top-0 z-50 bg-navy shadow-md">
       <Container>
@@ -47,12 +61,18 @@ export default function Navbar() {
 
           <div className="hidden items-center gap-3 xl:flex">
             <ThemeToggle />
-            <NavLink to="/login" className={linkClass}>
-              Login
-            </NavLink>
-            <Button to="/register" variant="outlineLight">
-              Register
-            </Button>
+            {user ? (
+              <ProfileMenu />
+            ) : (
+              <>
+                <NavLink to="/login" className={linkClass}>
+                  Login
+                </NavLink>
+                <Button to="/register" variant="outlineLight">
+                  Register
+                </Button>
+              </>
+            )}
             <Button to="/explore" variant="gold">
               <Search className="h-4 w-4" aria-hidden="true" />
               Find Accommodation
@@ -97,21 +117,55 @@ export default function Navbar() {
                   </NavLink>
                 </li>
               ))}
-              <li>
-                <NavLink to="/login" className={linkClass} onClick={closeMenu}>
-                  Login
-                </NavLink>
-              </li>
+              {user ? (
+                <>
+                  <li>
+                    <NavLink to="/account" className={linkClass} onClick={closeMenu}>
+                      My account
+                    </NavLink>
+                  </li>
+                  {profile?.role === 'owner' && (
+                    <li>
+                      <NavLink to="/owner" className={linkClass} onClick={closeMenu}>
+                        Owner dashboard
+                      </NavLink>
+                    </li>
+                  )}
+                  {isAdmin && (
+                    <li>
+                      <NavLink to="/admin" className={linkClass} onClick={closeMenu}>
+                        Admin
+                      </NavLink>
+                    </li>
+                  )}
+                </>
+              ) : (
+                <li>
+                  <NavLink to="/login" className={linkClass} onClick={closeMenu}>
+                    Login
+                  </NavLink>
+                </li>
+              )}
             </ul>
             <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-              <Button
-                to="/register"
-                variant="outlineLight"
-                onClick={closeMenu}
-                className="sm:flex-1"
-              >
-                Register
-              </Button>
+              {user ? (
+                <Button
+                  variant="outlineLight"
+                  onClick={handleLogout}
+                  className="sm:flex-1"
+                >
+                  Log out
+                </Button>
+              ) : (
+                <Button
+                  to="/register"
+                  variant="outlineLight"
+                  onClick={closeMenu}
+                  className="sm:flex-1"
+                >
+                  Register
+                </Button>
+              )}
               <Button
                 to="/explore"
                 variant="gold"
