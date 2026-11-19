@@ -104,6 +104,11 @@ service cloud.firestore {
 
       allow update: if isUser(uid)
         && resource.data.suspended == false
+                && request.resource.data.keys().hasOnly([
+          'displayName', 'email', 'phone', 'role', 'preferredLocations',
+          'budgetMin', 'budgetMax', 'preferredType', 'points', 'level',
+          'suspended', 'ownerVerificationStatus', 'createdAt', 'updatedAt'
+        ])
         && !changedKeys().hasAny([
           'points', 'level', 'suspended', 'ownerVerificationStatus',
           'createdAt', 'email'

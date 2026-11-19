@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import Container from '../components/ui/Container'
 import Button from '../components/ui/Button'
 import VerificationNotice from '../components/auth/VerificationNotice'
+import ProfileForm from '../components/auth/ProfileForm'
 import { useAuth } from '../hooks/useAuth'
 import { logout } from '../services/authService'
 
@@ -37,12 +38,8 @@ export default function Profile() {
       </div>
 
       <section className="mt-6 rounded-2xl border border-taupe bg-surface p-6 shadow-sm">
-        <h2 className="text-xl">Profile</h2>
-        <dl className="mt-4 grid gap-4 sm:grid-cols-2">
-          <div>
-            <dt className="text-sm text-charcoal/70">Name</dt>
-            <dd className="font-medium text-ink">{profile.displayName}</dd>
-          </div>
+        <h2 className="text-xl">Account summary</h2>
+        <dl className="mt-4 grid gap-4 sm:grid-cols-3">
           <div>
             <dt className="text-sm text-charcoal/70">Account type</dt>
             <dd className="font-medium text-ink">
@@ -50,8 +47,10 @@ export default function Profile() {
             </dd>
           </div>
           <div>
-            <dt className="text-sm text-charcoal/70">Phone</dt>
-            <dd className="font-medium text-ink">{profile.phone || 'Not added'}</dd>
+            <dt className="text-sm text-charcoal/70">StayPoints</dt>
+            <dd className="font-medium text-ink">
+              {profile.points} (level {profile.level})
+            </dd>
           </div>
           {profile.role === 'owner' && (
             <div>
@@ -61,13 +60,14 @@ export default function Profile() {
               </dd>
             </div>
           )}
-          <div>
-            <dt className="text-sm text-charcoal/70">StayPoints</dt>
-            <dd className="font-medium text-ink">
-              {profile.points} (level {profile.level})
-            </dd>
-          </div>
         </dl>
+      </section>
+
+      <section className="mt-6 rounded-2xl border border-taupe bg-surface p-6 shadow-sm">
+        <h2 className="text-xl">Edit profile</h2>
+        <div className="mt-4">
+          <ProfileForm profile={profile} />
+        </div>
       </section>
 
       <Button variant="outline" onClick={handleLogout} className="mt-6">
