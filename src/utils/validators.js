@@ -29,3 +29,21 @@ export function validatePhone(value, { required = false } = {}) {
   }
   return null
 }
+
+export function validateBudget(value) {
+  if (value === '' || value === null || value === undefined) return null
+  const number = Number(value)
+  if (!Number.isFinite(number) || number < 0) return 'Enter a positive amount.'
+  if (number > 1000000) return 'That amount looks too high.'
+  return null
+}
+
+// Turns "Malabe, Kandy" into ['Malabe', 'Kandy'] (at most 10 places, 60 characters each).
+export function parseLocations(text) {
+  return text
+    .split(',')
+    .map((place) => place.trim())
+    .filter(Boolean)
+    .slice(0, 10)
+    .map((place) => place.slice(0, 60))
+}

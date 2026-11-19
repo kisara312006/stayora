@@ -6,6 +6,8 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import ForgotPassword from './pages/ForgotPassword'
+import CompleteProfile from './pages/CompleteProfile'
 import Profile from './pages/Profile'
 import NotFound from './pages/NotFound'
 import PlaceholderPage from './pages/PlaceholderPage'
@@ -24,26 +26,8 @@ export default function App() {
         {/* Accounts */}
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-        <Route
-          path="forgot-password"
-          element={
-            <PlaceholderPage
-              title="Reset your password"
-              phase="the next step (4B)"
-              description="Password reset will be added next."
-            />
-          }
-        />
-        <Route
-          path="complete-profile"
-          element={
-            <PlaceholderPage
-              title="Complete your profile"
-              phase="the next step (4B)"
-              description="New Google users will choose their account type here."
-            />
-          }
-        />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="complete-profile" element={<CompleteProfile />} />
         <Route
           path="account"
           element={
