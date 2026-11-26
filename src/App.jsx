@@ -4,6 +4,8 @@ import ProtectedRoute from './routes/ProtectedRoute'
 import Home from './pages/Home'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import Explore from './pages/Explore'
+import ListingDetails from './pages/ListingDetails'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
@@ -22,6 +24,10 @@ export default function App() {
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
+
+        {/* Accommodation */}
+        <Route path="explore" element={<Explore />} />
+        <Route path="accommodation/:id" element={<ListingDetails />} />
 
         {/* Accounts */}
         <Route path="login" element={<Login />} />
@@ -42,7 +48,7 @@ export default function App() {
             <ProtectedRoute role="owner">
               <PlaceholderPage
                 title="Owner dashboard"
-                phase="Phase 5"
+                phase="Phase 5B"
                 description="Your listings, availability and reservations will appear here."
               />
             </ProtectedRoute>
@@ -62,26 +68,6 @@ export default function App() {
         />
 
         {/* Later phases */}
-        <Route
-          path="explore"
-          element={
-            <PlaceholderPage
-              title="Explore accommodation"
-              phase="Phase 5 and 7"
-              description="Search, filters and results will appear here."
-            />
-          }
-        />
-        <Route
-          path="accommodation/:id"
-          element={
-            <PlaceholderPage
-              title="Accommodation details"
-              phase="Phase 5"
-              description="Full listing details, photos and map will appear here."
-            />
-          }
-        />
         <Route
           path="assistant"
           element={
