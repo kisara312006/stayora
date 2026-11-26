@@ -11,6 +11,8 @@ import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
 import CompleteProfile from './pages/CompleteProfile'
 import Profile from './pages/Profile'
+import OwnerDashboard from './pages/OwnerDashboard'
+import OwnerListingEditor from './pages/OwnerListingEditor'
 import NotFound from './pages/NotFound'
 import PlaceholderPage from './pages/PlaceholderPage'
 import FirebaseCheck from './pages/FirebaseCheck'
@@ -42,18 +44,34 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Owners */}
         <Route
           path="owner"
           element={
             <ProtectedRoute role="owner">
-              <PlaceholderPage
-                title="Owner dashboard"
-                phase="Phase 5B"
-                description="Your listings, availability and reservations will appear here."
-              />
+              <OwnerDashboard />
             </ProtectedRoute>
           }
         />
+        <Route
+          path="owner/listings/new"
+          element={
+            <ProtectedRoute role="owner">
+              <OwnerListingEditor />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="owner/listings/:id/edit"
+          element={
+            <ProtectedRoute role="owner">
+              <OwnerListingEditor />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin */}
         <Route
           path="admin"
           element={
